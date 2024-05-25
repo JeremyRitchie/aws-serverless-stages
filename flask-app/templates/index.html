@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>Time API</title>
+</head>
+<body>
+
+<h1>Example API</h1>
+<h2>Get</h2>
+<p>/time?timezone={timezone}</p>
+<h4>Example:</h4>
+<p> /time?timezone=America/New_York</p>
+<br>
+<h3>Full list of timezones:</h3>
+<ul>
+    {% for timezone in timezones %}
+        <li>{{ timezone }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
