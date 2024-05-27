@@ -1,10 +1,10 @@
 import { Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { elbv2 } from 'aws-cdk-lib';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 
-import { BaseStack } from './lib/base';
-import { ASGStack } from './lib/asg';
-import { ALBStack } from './lib/alb';
+import { BaseStack } from '../common/base';
+import { ALBStack } from '../common/alb';
+import { APIStack } from '../common/api';
 
 interface Stage1Props {
   env: Environment;
@@ -22,13 +22,13 @@ export class Stage1 extends Construct {
     const alb = new ALBStack(this, 'ALBStack', {
         env: props.env,
         baseStack: base,
-        targetType: elbv2.TargetType.INSTANCE,
+        targetType: elbv2.TargetType.IP,
     });
 
-    const asg = new ASGStack(this, 'ASGStack', {
+    const api = new APIStack(this, 'APIStaclk', {
         env: props.env,
         baseStack: base,
-        albStack: alb,
+        lambdaStack: alb,
     });
   }
 

@@ -1,23 +1,22 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-
-export class MyStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
-    super(scope, id, props);
-
-    // define resources here...
-  }
-}
-
-// for development, use account/region from cdk cli
-const devEnv = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
-};
+import { App } from 'aws-cdk-lib';
+import { Stage1 } from './lib/app/stage1';
+import { Stage2 } from './lib/app/stage2';
+// import { Stage3 } from './lib/app/stage3';
+// import { Stage4 } from './lib/app/stage4';
 
 const app = new App();
 
-new MyStack(app, 'serverless-stages-template-dev', { env: devEnv });
-// new MyStack(app, 'serverless-stages-template-prod', { env: prodEnv });
+new Stage1(app, 'Stage1', {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: 'ap-southeast-2',
+}});
+
+new Stage2(app, 'Stage2', {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: 'ap-southeast-2',
+}});
+
 
 app.synth();

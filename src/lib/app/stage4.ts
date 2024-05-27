@@ -1,10 +1,10 @@
 import { Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { elbv2 } from 'aws-cdk-lib';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 
-import { BaseStack } from './lib/base';
-import { ASGStack } from './lib/asg';
-import { ALBStack } from './lib/alb';
+import { BaseStack } from '../common/base';
+import { ASGStack } from '../common/asg';
+import { ALBStack } from '../common/alb';
 
 interface Stage1Props {
   env: Environment;

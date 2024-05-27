@@ -47,7 +47,7 @@ export class ECSStack extends Stack {
       }));
 
     taskDefinition.addContainer('Container', {
-        image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, '../../flask-app')),
+        image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, '../../../flask-app')),
         memoryLimitMiB: 256,
         cpu: 128,
         portMappings: [{ containerPort: 8080 }],

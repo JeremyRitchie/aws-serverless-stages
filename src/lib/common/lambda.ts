@@ -3,13 +3,13 @@ import { Construct } from 'constructs';
 import * as _lambda from 'aws-cdk-lib/aws-lambda';
 import path = require('path');
 
-export interface EC2StackProps extends StackProps {
+export interface LambdaStackProps extends StackProps {
     lambdaDir: string;
 }
 
-export class EC2Stack extends Stack {
+export class LambdaStack extends Stack {
   lambda: _lambda.Function;
-  constructor(scope: Construct, id: string, props: EC2StackProps) {
+  constructor(scope: Construct, id: string, props: LambdaStackProps) {
     super(scope, id, props);
 
     this.lambda = new _lambda.Function(this, 'Lambda', {

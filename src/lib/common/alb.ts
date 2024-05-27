@@ -1,14 +1,17 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import * as elbv2_targets from 'aws-cdk-lib/aws-elasticloadbalancingv2-targets';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53_targets from 'aws-cdk-lib/aws-route53-targets';
 
 import { BaseStack } from './base';
+import { Route53Stack } from './route53';
 
 
 export interface ALBStackProps extends StackProps {
     targetType: elbv2.TargetType;
     baseStack: BaseStack;
+    route53Stack: Route53Stack;
 }
 
 export class ALBStack extends Stack {
@@ -29,10 +32,27 @@ export class ALBStack extends Stack {
         targetType: props.targetType
     });
 
+    this.alb.addListener('HTTPS', {
+        port: 443,
+        protocol: elbv2.ApplicationProtocol.HTTPS,
+        defaultAction: elbv2.ListenerAction.forward([this.targetGroup]),
+        certificates: [props.route53Stack.cert]
+    });
+
     this.alb.addListener('HTTP', {
         port: 80,
         protocol: elbv2.ApplicationProtocol.HTTP,
-        defaultAction: elbv2.ListenerAction.forward([this.targetGroup]),
+        defaultAction: elbv2.ListenerAction.redirect({
+            protocol: 'HTTPS',
+            port: '443',
+            permanent: true,
+        }),
+    });
+
+    new route53.ARecord(this, 'AliasRecord', {
+        zone: props.route53Stack.hostedzone,
+        target: route53.RecordTarget.fromAlias(new route53_targets.LoadBalancerTarget(this.alb)),
+        recordName: props.route53Stack.subdomain,
     });
 
   }
