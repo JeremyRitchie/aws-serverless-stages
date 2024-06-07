@@ -34,7 +34,7 @@ export class AuroraStack extends Stack {
     this.cluster = new rds.DatabaseCluster(this, 'Database', {
         engine: rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
         writer: rds.ClusterInstance.serverlessV2('writer'),
-        serverlessV2MinCapacity: 2,
+        serverlessV2MinCapacity: 0.5,
         serverlessV2MaxCapacity: 10,
         vpc: props.baseStack.vpc,
         credentials: rds.Credentials.fromGeneratedSecret('postgres'),
@@ -42,8 +42,6 @@ export class AuroraStack extends Stack {
         securityGroups: [securityGroup],
       });
 
-    // allow inbound traffic from the ECS service
     securityGroup.addIngressRule(props.ecsStack.service.connections.securityGroups[0], ec2.Port.tcp(5432));
-
   }
 }

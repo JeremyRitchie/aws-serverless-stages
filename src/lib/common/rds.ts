@@ -24,7 +24,7 @@ export class RDSStack extends Stack {
     this.db = new rds.DatabaseInstance(this, 'Instance', {
         vpc: props.baseStack.vpc,
         engine: rds.DatabaseInstanceEngine.POSTGRES,
-        instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MEDIUM),
+        instanceType: ec2.InstanceType.of(ec2.InstanceClass.R6A, ec2.InstanceSize.XLARGE),
         allocatedStorage: 20,
         credentials: rds.Credentials.fromGeneratedSecret('postgres'),
         vpcSubnets: {
