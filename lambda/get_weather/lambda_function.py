@@ -5,10 +5,21 @@ import os
 import python_weather
 
 def lambda_handler(event, context):
-    timezone = event['queryStringParameters'].get('timezone', 'America/New York')
-    if os.name == 'nt':
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    print(asyncio.run(get_weather(timezone.split('/')[1])))
+    print(event)
+    try:
+        timezone = event['queryStringParameters']['timezone']
+    except KeyError:
+        return {
+            "isBase64Encoded": False,
+            "statusCode": 400,
+            "headers": {
+                "content-type": "application/json"
+            },
+            "body": "Invalid weather timezone"
+        }
+    packet = asyncio.run(get_weather(timezone.split('/')[1]))
+    print(f"Packet: {packet}")
+    return packet
 
 
 async def get_weather(location):
@@ -21,16 +32,17 @@ async def get_weather(location):
             "headers": {
                 "content-type": "application/json"
             },
-            "body": {
+            "body": json.dumps({
                 "temperature": weather.temperature,
                 "humidity": weather.humidity,
                 "wind_speed": weather.wind_speed,
                 "wind_direction": weather.wind_direction.value,
                 "local_population": weather.local_population,
                 "datetime": weather.datetime.strftime("%Y-%m-%d %H:%M:%S"),
-            }
+            })
         }
     except python_weather.errors.Error:
+        print("Invalid weather timezone")
         return {
             "isBase64Encoded": False,
             "statusCode": 400,

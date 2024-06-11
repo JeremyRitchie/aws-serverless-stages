@@ -10,6 +10,7 @@ import { ALBStack } from './alb';
 
 
 export interface ECSStackProps extends StackProps {
+    environmentVariables?: { [key: string]: string; } | undefined;
     baseStack: BaseStack;
     albStack: ALBStack;
 }
@@ -29,7 +30,7 @@ export class ECSStack extends Stack {
         runtimePlatform: {
             operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
             cpuArchitecture: ecs.CpuArchitecture.ARM64,
-        }
+        },
     });
 
     taskDefinition.executionRole?.attachInlinePolicy(new iam.Policy(this, 'task-policy', {
@@ -52,6 +53,7 @@ export class ECSStack extends Stack {
         cpu: 128,
         portMappings: [{ containerPort: 8080 }],
         logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'flask-app-ecs' }),
+        environment: props.environmentVariables,
     });
 
     this.service = new ecs.FargateService(this, 'Service', {

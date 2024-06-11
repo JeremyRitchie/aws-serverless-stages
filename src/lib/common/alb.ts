@@ -12,6 +12,9 @@ export interface ALBStackProps extends StackProps {
     targetType: elbv2.TargetType;
     baseStack: BaseStack;
     route53Stack: Route53Stack;
+    enableHttps: boolean;
+    enableHttpRedirect: boolean;
+    createDNSRecord: boolean;
 }
 
 export class ALBStack extends Stack {
@@ -32,28 +35,40 @@ export class ALBStack extends Stack {
         targetType: props.targetType
     });
 
-    this.alb.addListener('HTTPS', {
-        port: 443,
-        protocol: elbv2.ApplicationProtocol.HTTPS,
-        defaultAction: elbv2.ListenerAction.forward([this.targetGroup]),
-        certificates: [props.route53Stack.cert]
-    });
+    if (props.enableHttps) {
+        this.alb.addListener('HTTPS', {
+            port: 443,
+            protocol: elbv2.ApplicationProtocol.HTTPS,
+            defaultAction: elbv2.ListenerAction.forward([this.targetGroup]),
+            certificates: [props.route53Stack.cert]
+        });
+    }
 
-    this.alb.addListener('HTTP', {
-        port: 80,
-        protocol: elbv2.ApplicationProtocol.HTTP,
-        defaultAction: elbv2.ListenerAction.redirect({
-            protocol: 'HTTPS',
-            port: '443',
-            permanent: true,
-        }),
-    });
+    if (props.enableHttpRedirect) {
+        this.alb.addListener('HTTP', {
+            port: 80,
+            protocol: elbv2.ApplicationProtocol.HTTP,
+            defaultAction: elbv2.ListenerAction.redirect({
+                protocol: 'HTTPS',
+                port: '443',
+                permanent: true,
+            }),
+        });
+    } else {
+        this.alb.addListener('HTTP', {
+            port: 80,
+            protocol: elbv2.ApplicationProtocol.HTTP,
+            defaultAction: elbv2.ListenerAction.forward([this.targetGroup]),
+        });
+    }
 
-    new route53.ARecord(this, 'AliasRecord', {
-        zone: props.route53Stack.hostedzone,
-        target: route53.RecordTarget.fromAlias(new route53_targets.LoadBalancerTarget(this.alb)),
-        recordName: props.route53Stack.subdomain,
-    });
+    if (props.createDNSRecord) {
+        new route53.ARecord(this, 'AliasRecord', {
+            zone: props.route53Stack.hostedzone,
+            target: route53.RecordTarget.fromAlias(new route53_targets.LoadBalancerTarget(this.alb)),
+            recordName: props.route53Stack.subdomain,
+        });
+    }
 
   }
 }
