@@ -31,6 +31,9 @@ export class Stage1 extends Construct {
         baseStack: base,
         targetType: elbv2.TargetType.INSTANCE,
         route53Stack: route53,
+        enableHttps: true,
+        enableHttpRedirect: true,
+        createDNSRecord: true,
     });
 
     // const asg = 

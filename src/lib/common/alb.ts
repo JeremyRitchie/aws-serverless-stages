@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { Stack, StackProps, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -32,7 +32,8 @@ export class ALBStack extends Stack {
         vpc: props.baseStack.vpc,
         port: 8080,
         protocol: elbv2.ApplicationProtocol.HTTP,
-        targetType: props.targetType
+        targetType: props.targetType,
+        deregistrationDelay: Duration.seconds(0),
     });
 
     if (props.enableHttps) {
