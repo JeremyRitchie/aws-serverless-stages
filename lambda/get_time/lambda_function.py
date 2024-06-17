@@ -3,7 +3,7 @@ import json
 import pytz
 
 def lambda_handler(event, context):
-    timezone = event.queryStringParameters.get('timezone', 'UTC')
+    timezone = event["queryStringParameters"].get('timezone', 'UTC')
     try:
         time = str(datetime.datetime.now(pytz.timezone(timezone)))
         return {
@@ -12,10 +12,10 @@ def lambda_handler(event, context):
             "headers": {
                 "content-type": "application/json"
             },
-            "body": {
+            "body": json.dumps({
                 "time": time,
                 "timezone": timezone
-            }
+            })
 
         }
     except pytz.exceptions.UnknownTimeZoneError:

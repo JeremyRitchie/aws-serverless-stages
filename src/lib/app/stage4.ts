@@ -7,7 +7,6 @@ import { APIStack } from '../common/api';
 import { Route53Stack } from '../common/route53';
 import { LambdaStack } from '../common/lambda';
 import { DynamoDBStack } from '../common/dynamodb';
-// import { AuroraStack } from '../common/aurora';
 
 interface Stage4Props {
   env: Environment;
@@ -37,7 +36,7 @@ export class Stage4 extends Construct {
       lambdaDir: '../../../lambda/get_time',
     });
 
-    const getRoot = new LambdaStack(this, 'GetTimeLambdaStack', {
+    const getRoot = new LambdaStack(this, 'GetRootLambdaStack', {
       env: props.env,
       lambdaDir: '../../../lambda/get_root',
     });

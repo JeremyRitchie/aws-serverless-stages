@@ -5,7 +5,7 @@ import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { BaseStack } from '../common/base';
 import { ALBStack } from '../common/alb';
 import { ECSStack } from '../common/ecs';
-// import { AuroraStack } from '../common/aurora';
+import { AuroraStack } from '../common/aurora';
 import { Route53Stack } from '../common/route53';
 
 interface Stage2Props {
@@ -36,18 +36,17 @@ export class Stage2 extends Construct {
         createDNSRecord: true,
     });
 
-    // const ecs = 
-    new ECSStack(this, 'ECSStack', {
+    const ecs = new ECSStack(this, 'ECSStack', {
         env: props.env,
         baseStack: base,
         albStack: alb,
     });
 
-    // new AuroraStack(this, 'AuroraStack', {
-    //     env: props.env,
-    //     baseStack: base,
-    //     ecsStack: ecs,
-    // });
+    new AuroraStack(this, 'AuroraStack', {
+        env: props.env,
+        baseStack: base,
+        ecsStack: ecs,
+    });
   }
 
 }

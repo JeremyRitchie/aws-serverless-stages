@@ -5,7 +5,6 @@ import os
 import python_weather
 
 def lambda_handler(event, context):
-    print(event)
     try:
         timezone = event['queryStringParameters']['timezone']
     except KeyError:
@@ -18,7 +17,6 @@ def lambda_handler(event, context):
             "body": "Invalid weather timezone"
         }
     packet = asyncio.run(get_weather(timezone.split('/')[1]))
-    print(f"Packet: {packet}")
     return packet
 
 
@@ -42,7 +40,6 @@ async def get_weather(location):
             })
         }
     except python_weather.errors.Error:
-        print("Invalid weather timezone")
         return {
             "isBase64Encoded": False,
             "statusCode": 400,
@@ -51,6 +48,3 @@ async def get_weather(location):
             },
             "body": "Invalid weather timezone"
         }
-
-if __name__ == '__main__':
-    lambda_handler({'queryStringParameters': {'timezone': 'America/New York'}}, None)

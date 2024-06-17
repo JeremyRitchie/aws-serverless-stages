@@ -8,7 +8,7 @@ import { ALBStack } from '../common/alb';
 import { APIStack } from '../common/api';
 import { Route53Stack } from '../common/route53';
 import { LambdaStack } from '../common/lambda';
-// import { AuroraStack } from '../common/aurora';
+import { AuroraStack } from '../common/aurora';
 import { ECSStack } from '../common/ecs';
 import { DynamoDBStack } from '../common/dynamodb';
 
@@ -61,7 +61,7 @@ export class Stage3 extends Construct {
       ],
     });
 
-    new ECSStack(this, 'ECSStack', {
+    const ecs = new ECSStack(this, 'ECSStack', {
       env: props.env,
       baseStack: base,
       albStack: alb,
@@ -80,11 +80,11 @@ export class Stage3 extends Construct {
       ]
     });
 
-    // new AuroraStack(this, 'AuroraStack', {
-    //     env: props.env,
-    //     baseStack: base,
-    //     ecsStack: ecs,
-    // });
+    new AuroraStack(this, 'AuroraStack', {
+        env: props.env,
+        baseStack: base,
+        ecsStack: ecs,
+    });
   }
 
 }
