@@ -62,7 +62,4 @@ Contributions are welcome! If you have any suggestions, improvements, or bug fix
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
-For more details on how to use this repository effectively, please refer to [Part 2](https://jeremyritchie.com/posts/14/) of the accompanying blog post series.
-
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more information.
