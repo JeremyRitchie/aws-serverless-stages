@@ -49,5 +49,4 @@ export class Stage1 extends Construct {
         asgStack: asg,
     });
   }
-
 }

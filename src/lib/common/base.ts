@@ -26,7 +26,6 @@ export class BaseStack extends Stack {
         ],
         natGateways: 1,
         ipAddresses: ec2.IpAddresses.cidr(props.cidr),
-    })
-
+    });
   }
 }

@@ -33,7 +33,6 @@ export class RDSStack extends Stack {
         securityGroups: [securityGroup],
     });
 
-    securityGroup.addIngressRule(props.asgStack.securityGroup, ec2.Port.tcp(5432)); // allow inbound traffic from the EC2 instance
-
+    securityGroup.addIngressRule(props.asgStack.securityGroup, ec2.Port.tcp(5432));
   }
 }

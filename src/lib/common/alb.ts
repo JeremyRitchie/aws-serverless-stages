@@ -70,6 +70,5 @@ export class ALBStack extends Stack {
             recordName: props.route53Stack.subdomain,
         });
     }
-
   }
 }

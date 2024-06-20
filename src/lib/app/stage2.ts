@@ -48,5 +48,4 @@ export class Stage2 extends Construct {
         ecsStack: ecs,
     });
   }
-
 }
